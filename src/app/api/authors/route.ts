@@ -108,3 +108,24 @@ export async function POST(request: Request) {
     );
   }
 }
+
+export async function DELETE(request: Request) {
+  await connectDB();
+
+  try {
+    const result = await Author.deleteMany({}); // This deletes all author records
+
+    return NextResponse.json(
+      { message: `${result.deletedCount} author(s) deleted.` },
+      { status: 200 }
+    );
+  } catch (error) {
+    const errorMessage =
+      (error as Error).message || "An unknown error occurred";
+    console.error("Error deleting authors", errorMessage);
+    return NextResponse.json(
+      { message: "Error deleting authors", errorMessage },
+      { status: 500 }
+    );
+  }
+}

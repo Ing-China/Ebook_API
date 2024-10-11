@@ -48,13 +48,23 @@ export async function POST(request: Request) {
     await writeFile(filePath, buffer);
     await writeFile(pdfPath, pdfBuff);
 
-    const imageUrl = `http://${request.headers.get(
-      "host"
-    )}/uploads/images/${filename}`;
+    const baseUrl =
+      process.env.NEXT_PUBLIC_API_BASE_URL ||
+      `http://${request.headers.get("host")}`;
 
-    const pdfUrl = `http://${request.headers.get(
-      "host"
-    )}/uploads/pdfs/${pdfFileName}`;
+    const imageUrl = `${baseUrl}/uploads/images/${filename}`;
+
+    const pdfUrl = `${baseUrl}/uploads/pdfs/${filename}`;
+
+    // const imageUrl = `${baseUrl}/uploads/images/${filename}`;
+
+    // const imageUrl = `http://${request.headers.get(
+    //   "host"
+    // )}/uploads/images/${filename}`;
+
+    // const pdfUrl = `http://${request.headers.get(
+    //   "host"
+    // )}/uploads/pdfs/${pdfFileName}`;
 
     const newBook = new Book({
       name,
@@ -120,6 +130,27 @@ export async function GET(request: Request) {
     console.error("Error fetching books", errorMessage);
     return NextResponse.json(
       { message: "Error fetching books", errorMessage },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(request: Request) {
+  await connectDB();
+
+  try {
+    const result = await Book.deleteMany({}); // This deletes all book records
+
+    return NextResponse.json(
+      { message: `${result.deletedCount} book(s) deleted.` },
+      { status: 200 }
+    );
+  } catch (error) {
+    const errorMessage =
+      (error as Error).message || "An unknown error occurred";
+    console.error("Error deleting books", errorMessage);
+    return NextResponse.json(
+      { message: "Error deleting books", errorMessage },
       { status: 500 }
     );
   }
