@@ -1,10 +1,18 @@
 import connectDB from "@/lib/mongodb";
 import { NextResponse } from "next/server";
 import Book from "@/models/Book";
+import BookType from "@/models/BookType";
+import Author from "@/models/Author";
 
 export async function GET(request: Request) {
   try {
     await connectDB();
+
+    const booktypes = await BookType.find();
+    const authors = await Author.find();
+
+    console.log(booktypes);
+    console.log(authors);
 
     const { searchParams } = new URL(request.url);
     const page = Math.max(1, parseInt(searchParams.get("page") || "1", 10));
