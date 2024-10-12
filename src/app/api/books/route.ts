@@ -54,7 +54,7 @@ export async function POST(request: Request) {
 
     const imageUrl = `${baseUrl}/uploads/images/${filename}`;
 
-    const pdfUrl = `${baseUrl}/uploads/pdfs/${filename}`;
+    const pdfUrl = `${baseUrl}/uploads/pdfs/${pdfFileName}`;
 
     // const imageUrl = `${baseUrl}/uploads/images/${filename}`;
 
