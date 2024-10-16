@@ -1,5 +1,6 @@
 import connectDB from "@/lib/mongodb";
 import Author from "@/models/Author";
+import BookType from "@/models/BookType";
 import { writeFile } from "fs/promises";
 
 import mongoose from "mongoose";
