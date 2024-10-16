@@ -164,7 +164,7 @@ export async function GET(
       );
     }
 
-    const author = await Author.findById(id);
+    const author = await Author.findById(id).populate("bookType", "name");
 
     if (!author) {
       return NextResponse.json(
