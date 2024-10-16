@@ -157,6 +157,10 @@ export async function GET(
   try {
     await connectDB();
 
+    const booktypes = await BookType.find();
+
+    console.log(booktypes);
+
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json(
         { message: "Invalid author ID" },
