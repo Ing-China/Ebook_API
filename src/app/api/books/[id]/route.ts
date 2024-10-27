@@ -1,8 +1,12 @@
 import connectDB from "@/lib/mongodb";
+import Author from "@/models/Author";
 import Book from "@/models/Book";
+import BookType from "@/models/BookType";
+import { populate } from "dotenv";
+import { json } from "express";
 import { writeFile } from "fs/promises";
 
-import mongoose from "mongoose";
+import mongoose, { Types } from "mongoose";
 import { NextResponse } from "next/server";
 import path from "path";
 
@@ -152,11 +156,20 @@ export async function GET(
 
   try {
     await connectDB();
+
+    const booktypes = await BookType.find();
+    const authors = await Author.find();
+
+    console.log(booktypes);
+    console.log(authors);
+
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json({ message: "Invalid book ID" }, { status: 400 });
     }
 
-    const book = await Book.findById(id);
+    const book = await Book.findById(id)
+      .populate("author", "name")
+      .populate("bookType", "name");
 
     if (!book) {
       return NextResponse.json({ message: "Book not found" }, { status: 404 });
